@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Who Tweeted Last?</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Cabin:700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/grayscale.min.css" rel="stylesheet">
+      
+      
+      
+      
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Who Tweeted Last?</a>
+        
+      </div>
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="masthead">
+      <div class="intro-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h1 class="brand-heading">Was it DJ Guv, Heist or Serum?</h1>
+              <h3> Press Play to Find Out</h3>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <div class="container-fluid audioCenter">  
+    <audio id="audio-player" controls>
+        <source src="" type="audio/mpeg">
+    </audio>
+      </div>
+      
+    
+
+    -<script>
+        var userOneNewestTime = 0;
+        var userTwoNewestTime = 0;
+        var userThreeNewestTime = 0;
+      
+      
+        function getLatestUser() {
+            latestUser = {"userOne": Date.parse(userOneNewestTime), "userThree": Date.parse(userThreeNewestTime), "userTwo": Date.parse(userTwoNewestTime) };
+            
+            keysSorted = Object.keys(latestUser).sort(function(a,b){return latestUser[a]-latestUser[b]});
+            console.log(keysSorted);
+            console.log(keysSorted[keysSorted.length-1]);
+            document.getElementById("audio-player").src = "audio/"+keysSorted[keysSorted.length-1]+".mp3";
+           
+        }
+      
+        
+        // Load google sheet
+        function loadUserOne() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://spreadsheets.google.com/feeds/list/1r1585W7gxlk1HfSzmBuEz-w6B5pfKgsEXcHYiCO93q8/od6/public/values?alt=json', true); //Using Google Sheet data in JSON format
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var tweets = JSON.parse(this.responseText);
+
+                    /*var output = '';*/
+                    for (var i in tweets.feed.entry) {
+                        var time = tweets.feed.entry[i].title.$t;
+                        time = time.replace(" at", ",");
+                        //console.log("newly formatted time " + newTime);
+                        if(time.includes('PM')) {
+                            time = time.replace("PM", "");
+                        } else {
+                            time = time.replace("AM", "");
+                        }
+                        userOneNewestTime = time;
+                        /*output +=
+                            '<div class="user">' +
+                            '<ul>' + 
+                            '<li>Tweet: ' + tweets.feed.entry[i].title.$t + '</li>' +
+                            '<li>Date integer: ' + Date.parse(time) + '</li>' +
+                            '</ul>' +
+                            '</div>';*/
+                    }
+                    
+                    //document.getElementById('user-one-tweets').innerHTML = 'UserOne latest tweet: ' + Date.parse(userOneNewestTime) + ' / ' + userOneNewestTime;    
+                    console.log(Date.parse(userOneNewestTime) );
+                }
+            }
+
+            xhr.send();
+        }
+        //end load google sheet
+        
+        loadUserOne();
+    
+      
+      
+      
+        
+        
+        // Load google sheet
+        function loadUserTwo() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://spreadsheets.google.com/feeds/list/13X055OB20KDiBqOfG15z8q-TIyReOzrUm_ANfrTk_60/od6/public/values?alt=json', true); //Using Google Sheet data in JSON format
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var tweets = JSON.parse(this.responseText);
+
+                    /*var output = '';*/
+                    for (var i in tweets.feed.entry) {
+                        var time = tweets.feed.entry[i].title.$t;
+                        time = time.replace(" at", ",");
+                        //console.log("newly formatted time " + newTime);
+                        if(time.includes('PM')) {
+                            time = time.replace("PM", "");
+                        } else {
+                            time = time.replace("AM", "");
+                        }
+                        userTwoNewestTime = time;
+                        /*output +=
+                            '<div class="user">' +
+                            '<ul>' + 
+                            '<li>Tweet: ' + tweets.feed.entry[i].title.$t + '</li>' +
+                            '<li>Date integer: ' + Date.parse(time) + '</li>' +
+                            '</ul>' +
+                            '</div>';*/
+                    }
+                    
+                    //document.getElementById('user-two-tweets').innerHTML = 'UserTwo latest tweet: ' + Date.parse(userTwoNewestTime) + ' / ' + userTwoNewestTime;    
+                    console.log(Date.parse(userTwoNewestTime) );
+                }
+            }
+
+            xhr.send();
+        }
+        //end load google sheet
+        
+        loadUserTwo();
+   
+      
+        
+        
+        // Load google sheet
+        function loadUserThree() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://spreadsheets.google.com/feeds/list/1psz5bVKRtpfAjrjlpO2KL3BUhxHU7M2Q4BZgI8_kOio/od6/public/values?alt=json', true); //Using Google Sheet data in JSON format
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var tweets = JSON.parse(this.responseText);
+
+                    /*var output = '';*/
+                    for (var i in tweets.feed.entry) {
+                        var time = tweets.feed.entry[i].title.$t;
+                        time = time.replace(" at", ",");
+                        //console.log("newly formatted time " + newTime);
+                        if(time.includes('PM')) {
+                            time = time.replace("PM", "");
+                        } else {
+                            time = time.replace("AM", "");
+                        }
+                        userThreeNewestTime = time;
+                        /*output +=
+                            '<div class="user">' +
+                            '<ul>' + 
+                            '<li>Tweet: ' + tweets.feed.entry[i].title.$t + '</li>' +
+                            '<li>Date integer: ' + Date.parse(time) + '</li>' +
+                            '</ul>' +
+                            '</div>';*/
+                    }
+                    
+                    //document.getElementById('user-three-tweets').innerHTML = 'UserThree latest tweet: ' + Date.parse(userThreeNewestTime) + ' / ' + userThreeNewestTime;    
+                    console.log(Date.parse(userThreeNewestTime) );
+                }
+            }
+
+            xhr.send();
+        }
+        //end load google sheet
+        
+        loadUserThree();
+        
+        setTimeout(getLatestUser, 2000);
+        //getLatestUser();
+    </script>
+
+    <!-- Footer -->
+    <footer>
+           
+      <div class="container text-center">
+        <p>Copyright &copy; Levi Giles 2017</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+
+   
+
+    <!-- Custom scripts for this template -->
+    <!--<script src="js/grayscale.min.js"></script>-->
+
+  </body>
+
+</html>
